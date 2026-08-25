@@ -47,7 +47,7 @@ Backend_Developer_Assignment/
 ├── docker-compose.yml
 ├── .dockerignore
 ├── .gitignore
-├── Aforro_APIs.postman_collection.json
+├── APIs_postman_collection.json
 └── README.md
 ```
 
