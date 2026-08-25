@@ -41,6 +41,29 @@ Run tests inside the container:
 docker-compose exec web python manage.py test
 ```
 
+## Environment Variables (.env)
+
+The application reads configurations from the `.env` file located inside the `project/` subdirectory (`project/.env`). A template `.env` is provided:
+
+```env
+# Database Configurations
+DB_NAME=ecommerce_system
+DB_USER=postgres
+DB_PASSWORD=password123
+DB_HOST=localhost
+DB_PORT=5432
+
+# Redis and Celery configurations
+USE_REDIS=False
+REDIS_URL=redis://127.0.0.1:6379/0
+CELERY_BROKER_URL=redis://127.0.0.1:6379/1
+CELERY_RESULT_BACKEND=redis://127.0.0.1:6379/1
+```
+
+### Key Settings:
+- `DB_HOST`: Set to `localhost` or `127.0.0.1` for local running, and ensure your local PostgreSQL credentials match `DB_USER` and `DB_PASSWORD`.
+- `USE_REDIS`: Set to `False` for local development if you do not have Redis installed. This activates an in-memory cache fallback and eager (synchronous) Celery task execution. When running inside Docker, this is automatically bypassed to use the docker containers.
+
 ## Local Setup
 
 Install dependencies:
