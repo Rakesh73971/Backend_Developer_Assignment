@@ -1,4 +1,4 @@
-# Aforro - Backend Developer Assignment (Round 2)
+# Backend Developer Assignment
 
 Backend module for store inventory, order handling, product search, autocomplete, Redis caching/rate limiting, Celery background jobs, and Dockerized development.
 
