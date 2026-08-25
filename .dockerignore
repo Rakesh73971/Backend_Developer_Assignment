@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Build artifacts
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# Local database / data
+*.sqlite3
+postgres_data/
+
+# Node / frontend caches (if any)
+node_modules/
+coverage/
+
+# Keep Docker files and app source
+!Dockerfile
+!docker-compose.yml
+!project/

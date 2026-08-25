@@ -1,0 +1,302 @@
+{
+	"info": {
+		"_postman_id": "97e68cf0-2cf8-410a-ae8c-9a4f6cf7d853",
+		"name": "Aforro Backend Assignment APIs",
+		"description": "Collection of all API endpoints for the Aforro Backend Assignment including Store Listings, Store Inventory, Order Creation, Search, Autocomplete Suggest, and OpenAPI/Swagger specifications.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Stores",
+			"item": [
+				{
+					"name": "GET List Stores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/stores/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores",
+								""
+							]
+						},
+						"description": "Retrieve a list of all registered stores in alphabetical order."
+					},
+					"response": []
+				},
+				{
+					"name": "GET Store Inventory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/stores/:store_id/inventory/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores",
+								":store_id",
+								"inventory",
+								""
+							],
+							"variable": [
+								{
+									"key": "store_id",
+									"value": "97",
+									"description": "The ID of the store (e.g. 97)"
+								}
+							]
+						},
+						"description": "Retrieve the inventory (products and quantities) stocked at a specific store, sorted alphabetically by product title."
+					},
+					"response": []
+				},
+				{
+					"name": "GET Store Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/stores/:store_id/orders/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stores",
+								":store_id",
+								"orders",
+								""
+							],
+							"variable": [
+								{
+									"key": "store_id",
+									"value": "97",
+									"description": "The ID of the store (e.g. 97)"
+								}
+							]
+						},
+						"description": "Retrieve a history of all orders associated with a specific store, sorted newest first."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "POST Create Order (Success)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"store_id\": 97,\n  \"items\": [\n    {\n      \"product_id\": 3980,\n      \"quantity_requested\": 1\n    },\n    {\n      \"product_id\": 3719,\n      \"quantity_requested\": 1\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/orders/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders",
+								""
+							]
+						},
+						"description": "Place an order at Store 97 for products that are in stock. This checks stock level, locks the database, deducts quantities, and returns a CONFIRMED order response. (Note: Make sure product_id exists and has quantity > 0 in your database)."
+					},
+					"response": []
+				},
+				{
+					"name": "POST Create Order (Rejected - Out of Stock)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"store_id\": 97,\n  \"items\": [\n    {\n      \"product_id\": 3511,\n      \"quantity_requested\": 9999\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/orders/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders",
+								""
+							]
+						},
+						"description": "Place an order requesting more stock than available. This will create an Order object with status REJECTED, deduct 0 quantities, and return a list of stock validation error messages."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Search & Autocomplete",
+			"item": [
+				{
+					"name": "GET Product Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/search/products/?q=Phone&store_id=97&in_stock=true&sort=price",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"search",
+								"products",
+								""
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Phone",
+									"description": "Keyword search on title, description, or category name"
+								},
+								{
+									"key": "store_id",
+									"value": "97",
+									"description": "Optionally filter by store, and annotate the specific store stock"
+								},
+								{
+									"key": "in_stock",
+									"value": "true",
+									"description": "Set to true to only show in-stock products"
+								},
+								{
+									"key": "sort",
+									"value": "price",
+									"description": "Sort by price (ascending), -price (descending), newest, or relevance"
+								}
+							]
+						},
+						"description": "Search and filter products list with pagination metadata."
+					},
+					"response": []
+				},
+				{
+					"name": "GET Autocomplete Suggestions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/search/suggest/?q=Phone",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"search",
+								"suggest",
+								""
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Phone",
+									"description": "Query prefix (minimum 3 characters)"
+								}
+							]
+						},
+						"description": "Fetch up to 10 unique product titles containing or matching the prefix. Uses Redis caching and handles rate limits (max 20 req/min)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OpenAPI Documentation",
+			"item": [
+				{
+					"name": "GET OpenAPI Schema JSON",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/schema/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"schema",
+								""
+							]
+						},
+						"description": "Download raw OpenAPI 3.0 schema definition in JSON format."
+					},
+					"response": []
+				},
+				{
+					"name": "GET Swagger UI Docs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/docs/swagger/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"docs",
+								"swagger",
+								""
+							]
+						},
+						"description": "View interactive Swagger API dashboard in browser."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		}
+	]
+}
